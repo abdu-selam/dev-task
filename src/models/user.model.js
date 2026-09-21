@@ -96,6 +96,18 @@ class UserModel {
 
     await writeJson(this.#allUsers, this.#TYPE_NAME);
   }
+
+  async removeToken(email, token) {
+    this.#allUsers.map((user) => {
+      if (user.email === email) {
+        user.token = user.token.filter((each) => each !== token);
+      }
+
+      return user;
+    });
+
+    await writeJson(this.#allUsers, this.#TYPE_NAME);
+  }
 }
 
 const Users = new UserModel();

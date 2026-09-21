@@ -95,7 +95,38 @@ const login = async (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  try {
+    const { access } = req.cookies || {};
+
+    if (!access) {
+      return res.status(401).json({
+        error: "Unauthorized",
+      });
+    }
+
+    const user = Users.getUserByToken(access);
+    if (!user) {
+      return res.status(401).json({
+        error: "Unauthorized",
+      });
+    }
+
+    await Users.removeToken(user.email, access);
+
+    res.clearCookie("access");
+
+    res.status(204).json({});
+  } catch (error) {
+    console.log("Error on logout controller", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
+  logout,
 };
