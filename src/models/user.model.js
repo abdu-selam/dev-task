@@ -84,6 +84,18 @@ class UserModel {
 
     return user;
   }
+
+  async addToken(email, token) {
+    this.#allUsers.map((user) => {
+      if (user.email === email) {
+        user.token.push(token);
+      }
+
+      return user;
+    });
+
+    await writeJson(this.#allUsers, this.#TYPE_NAME);
+  }
 }
 
 const Users = new UserModel();
