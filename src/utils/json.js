@@ -24,7 +24,7 @@ const readJson = async (type) => {
 };
 
 const writeJson = async (data, type) => {
-  const stringify = JSON.stringify(data);
+  const stringify = JSON.stringify(data, null, 2);
   if (!["users", "projects"].includes(type)) {
     throw new Error("Invalid type name");
   }

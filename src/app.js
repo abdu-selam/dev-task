@@ -1,4 +1,5 @@
 const express = require("express");
+const userRoute = require("./routes/user.route");
 
 const app = express();
 
@@ -9,5 +10,7 @@ app.get("/health", (req, res) => {
     message: "Hello From Server",
   });
 });
+
+app.use("/api/user", userRoute);
 
 module.exports = app;
