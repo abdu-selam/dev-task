@@ -54,6 +54,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body || {};
+    const { access } = req.cookies || {};
 
     if (!email || !password) {
       return res.status(400).json({
@@ -75,6 +76,10 @@ const login = async (req, res) => {
     }
 
     const token = uuid();
+
+    if (access) {
+      Users.removeToken(user.email, access);
+    }
 
     await Users.addToken(user.email, token);
 
