@@ -1,6 +1,13 @@
 const app = require("./src/app");
+const Users = require("./src/models/user.model");
 const { PORT } = require("./src/utils/env");
 
-app.listen(PORT, () => {
-  console.log(`Server is running on PORT: ${PORT}`);
-});
+const start = async () => {
+  await Users.initializeUsers();
+
+  app.listen(PORT, () => {
+    console.log(`Server is running on PORT: ${PORT}`);
+  });
+};
+
+start()

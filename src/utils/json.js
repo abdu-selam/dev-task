@@ -3,8 +3,8 @@ const path = require("path");
 
 const BASE_DIR = path.join(process.cwd(), "data");
 
-module.exports.readJson = async (type) => {
-  if (["users", "projects"].includes(type)) {
+const readJson = async (type) => {
+  if (!["users", "projects"].includes(type)) {
     throw new Error("Invalid type name");
   }
 
@@ -16,11 +16,16 @@ module.exports.readJson = async (type) => {
 
     return [];
   }
+
+  const fileContent = await fs.readFile(fileName, "utf-8");
+  const data = JSON.parse(fileContent);
+
+  return data;
 };
 
-module.exports.writeJson = async (data, type) => {
+const writeJson = async (data, type) => {
   const stringify = JSON.stringify(data);
-  if (["users", "projects"].includes(type)) {
+  if (!["users", "projects"].includes(type)) {
     throw new Error("Invalid type name");
   }
 
@@ -44,4 +49,9 @@ const createDir = async () => {
   fs.mkdir(BASE_DIR, {
     recursive: true,
   });
+};
+
+module.exports = {
+  writeJson,
+  readJson,
 };
