@@ -31,6 +31,41 @@ const createTeam = async (req, res) => {
   }
 };
 
+const deleteTeam = async (req, res) => {
+  try {
+    const { teamId } = req.params || {};
+
+    if (!teamId) {
+      return res.status(400).json({
+        error: "Team is required",
+      });
+    }
+
+    const team = Team.getTeamById(teamId);
+
+    if (!team) {
+      return res.status(400).json({
+        error: "Invalid Team Id",
+      });
+    }
+
+    if (team.admin !== req.user.id) {
+      return res.status(403).json({
+        error: "Unauthorized",
+      });
+    }
+
+    await Team.deleteTeam(teamId);
+
+    res.status(204).json({});
+  } catch (error) {
+    console.log("Error on deleteTeam", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 const addMembers = async (req, res) => {
   try {
     const { teamId } = req.params || {};
@@ -83,7 +118,7 @@ const addMembers = async (req, res) => {
       data: filteredUsers,
     });
   } catch (error) {
-    console.log("Error on createTeam", error);
+    console.log("Error on addMembers", error);
     res.status(500).json({
       error: "Internal Server Error",
     });
@@ -93,4 +128,5 @@ const addMembers = async (req, res) => {
 module.exports = {
   createTeam,
   addMembers,
+  deleteTeam,
 };

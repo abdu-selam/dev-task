@@ -71,6 +71,12 @@ class TeamModel {
     await writeJson(this.#allTeam, this.#TYPE_NAME);
     return true;
   }
+
+  async deleteTeam(teamId) {
+    this.#allTeam = this.#allTeam.filter((team) => team.id !== teamId);
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+  }
 }
 
 const Team = new TeamModel();
