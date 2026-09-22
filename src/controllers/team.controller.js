@@ -90,6 +90,41 @@ const getTeams = async (req, res) => {
   }
 };
 
+const getTeam = async (req, res) => {
+  try {
+    const { teamId } = req.params || {};
+
+    if (!teamId) {
+      return res.status(400).json({
+        error: "Team is required",
+      });
+    }
+
+    const team = Team.getTeamById(teamId);
+
+    if (!team) {
+      return res.status(400).json({
+        error: "Invalid Team Id",
+      });
+    }
+
+    if (team.admin !== req.user.id) {
+      return res.status(403).json({
+        error: "Unauthorized",
+      });
+    }
+
+    res.status(200).json({
+      team,
+    });
+  } catch (error) {
+    console.log("Error on getTeam", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 const addMembers = async (req, res) => {
   try {
     const { teamId } = req.params || {};
@@ -154,4 +189,5 @@ module.exports = {
   addMembers,
   deleteTeam,
   getTeams,
+  getTeam,
 };

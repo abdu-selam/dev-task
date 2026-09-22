@@ -5,12 +5,14 @@ const {
   addMembers,
   deleteTeam,
   getTeams,
+  getTeam,
 } = require("../controllers/team.controller");
 
 const route = Router();
 
 route.post("/", protectedRoute, createTeam);
 route.get("/", protectedRoute, getTeams);
+route.get("/:teamId", protectedRoute, getTeam);
 route.delete("/:teamId", protectedRoute, deleteTeam);
 
 route.post("/members/:teamId", protectedRoute, addMembers);
