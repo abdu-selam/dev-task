@@ -155,6 +155,20 @@ class TeamModel {
 
     return team.works;
   }
+
+  async removeWork(teamId, workId) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return;
+    }
+
+    team.works = this.works.filter((work) => work.id !== workId);
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+
+    return team.works;
+  }
 }
 
 const Team = new TeamModel();
