@@ -114,6 +114,27 @@ class TeamModel {
 
     await writeJson(this.#allTeam, this.#TYPE_NAME);
   }
+
+  async updateMember(teamId, userId, { name, email, roll, label }) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    team.members = team.members.map((member) => {
+      if (member.id === userId) {
+        member.name = this.#checkProps(name) ? name : member.name;
+        member.email = this.#checkProps(email) ? email : member.email;
+        member.roll = this.#checkProps(roll) ? roll : member.roll;
+        member.label = this.#checkProps(label) ? label : member.label;
+      }
+
+      return member;
+    });
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+  }
+
+  #checkProps(value) {
+    return typeof value === "string" && value.trim();
+  }
 }
 
 const Team = new TeamModel();
