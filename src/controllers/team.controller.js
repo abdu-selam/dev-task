@@ -175,70 +175,10 @@ const updateTeam = async (req, res) => {
   }
 };
 
-const addMembers = async (req, res) => {
-  try {
-    const { teamId } = req.params || {};
-    const { members } = req.body || {};
-
-    if (!teamId) {
-      return res.status(400).json({
-        error: "Team is required",
-      });
-    }
-
-    if (!Array.isArray(members)) {
-      return res.status(400).json({
-        error: "Members Should be an array",
-      });
-    }
-
-    const team = Team.getTeamById(teamId);
-
-    if (!team) {
-      return res.status(400).json({
-        error: "Invalid Team Id",
-      });
-    }
-
-    if (team.admin !== req.user.id) {
-      return res.status(403).json({
-        error: "Unauthorized",
-      });
-    }
-
-    const filteredUsers = formatMembersArray(members);
-
-    if (!filteredUsers.length) {
-      return res.status(400).json({
-        error: "",
-      });
-    }
-
-    const result = await Team.addMembers(filteredUsers, teamId);
-
-    if (!result) {
-      return res.status(500).json({
-        error: "Internal Server Error",
-      });
-    }
-
-    res.status(200).json({
-      message: "Members has been added",
-      data: filteredUsers,
-    });
-  } catch (error) {
-    console.log("Error on addMembers", error);
-    res.status(500).json({
-      error: "Internal Server Error",
-    });
-  }
-};
-
 module.exports = {
   createTeam,
   deleteTeam,
   getTeams,
   getTeam,
   updateTeam,
-  addMembers,
 };
