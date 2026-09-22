@@ -13,7 +13,7 @@ class TeamModel {
   }
 
   async createTeam({ user, name, description }) {
-    if (!user || !name) {
+    if (!user || !name?.trim()) {
       return {
         status: false,
         error: "All fields required",
@@ -33,7 +33,7 @@ class TeamModel {
 
     const team = {
       id,
-      name,
+      name: name.trim(),
       description: typeof description === "string" ? description : "",
       members: [],
       works: [],
@@ -47,6 +47,27 @@ class TeamModel {
     return {
       status: true,
       data: structuredClone(team),
+    };
+  }
+
+  async updateTeam(teamId, name, description) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return null;
+    }
+
+    team.name = typeof name === "string" && name.trim() ? name : this.name;
+    team.description =
+      typeof description === "string" && description.trim()
+        ? description
+        : this.description;
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+
+    return {
+      name: team.name,
+      description: team.description,
     };
   }
 
@@ -66,6 +87,12 @@ class TeamModel {
     return teams;
   }
 
+  async deleteTeam(teamId) {
+    this.#allTeam = this.#allTeam.filter((team) => team.id !== teamId);
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+  }
+
   async addMembers(members, teamId) {
     const team = this.#allTeam.find((team) => team.id === teamId);
 
@@ -76,12 +103,6 @@ class TeamModel {
     team.members.push(...members);
     await writeJson(this.#allTeam, this.#TYPE_NAME);
     return true;
-  }
-
-  async deleteTeam(teamId) {
-    this.#allTeam = this.#allTeam.filter((team) => team.id !== teamId);
-
-    await writeJson(this.#allTeam, this.#TYPE_NAME);
   }
 }
 
