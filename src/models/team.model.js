@@ -49,6 +49,28 @@ class TeamModel {
       data: team,
     };
   }
+
+  getTeamById(teamId) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return null;
+    }
+
+    return team;
+  }
+
+  async addMembers(members, teamId) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return null;
+    }
+
+    team.members.push(...members);
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+    return true;
+  }
 }
 
 const Team = new TeamModel();

@@ -1,3 +1,5 @@
+const Users = require("../models/user.model");
+
 const protectedRoute = async (req, res, next) => {
   try {
     const { access } = req.cookies || {};
