@@ -1,6 +1,8 @@
 const express = require("express");
-const userRoute = require("./routes/user.route");
 const cookieParser = require("cookie-parser");
+
+const userRoute = require("./routes/user.route");
+const teamRoute = require("./routes/team.route");
 
 const app = express();
 
@@ -14,5 +16,6 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/user", userRoute);
+app.use("/api/team", teamRoute);
 
 module.exports = app;
