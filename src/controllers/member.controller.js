@@ -153,8 +153,46 @@ const updateMember = async (req, res) => {
   }
 };
 
+const getMembers = async (req, res) => {
+  try {
+    const { teamId } = req.params || {};
+
+    if (!teamId) {
+      return res.status(400).json({
+        error: "Team is required",
+      });
+    }
+
+    const team = Team.getTeamById(teamId);
+
+    if (!team) {
+      return res.status(400).json({
+        error: "Invalid Team Id",
+      });
+    }
+
+    if (team.admin !== req.user.id) {
+      return res.status(403).json({
+        error: "Unauthorized",
+      });
+    }
+
+    const members = team.members;
+
+    res.status(200).json({
+      message: "Members has been updated",
+    });
+  } catch (error) {
+    console.log("Error on getMembers", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   addMembers,
   removeMembers,
   updateMember,
+  getMembers,
 };
