@@ -4,7 +4,7 @@ const path = require("path");
 const BASE_DIR = path.join(process.cwd(), "data");
 
 const readJson = async (type) => {
-  if (!["users", "projects"].includes(type)) {
+  if (!["users", "teams"].includes(type)) {
     throw new Error("Invalid type name");
   }
 
@@ -25,7 +25,7 @@ const readJson = async (type) => {
 
 const writeJson = async (data, type) => {
   const stringify = JSON.stringify(data, null, 2);
-  if (!["users", "projects"].includes(type)) {
+  if (!["users", "teams"].includes(type)) {
     throw new Error("Invalid type name");
   }
 
