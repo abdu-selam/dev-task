@@ -104,6 +104,16 @@ class TeamModel {
     await writeJson(this.#allTeam, this.#TYPE_NAME);
     return true;
   }
+
+  async removeMembers(memberIds, teamId) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    team.members = team.members.filter(
+      (member) => !memberIds.includes(member.id),
+    );
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+  }
 }
 
 const Team = new TeamModel();

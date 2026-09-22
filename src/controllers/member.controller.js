@@ -1,3 +1,5 @@
+const Team = require("../models/team.model");
+
 const addMembers = async (req, res) => {
   try {
     const { teamId } = req.params || {};
@@ -57,6 +59,51 @@ const addMembers = async (req, res) => {
   }
 };
 
+const removeMembers = async (req, res) => {
+  try {
+    const { teamId } = req.params || {};
+    const { memberIds } = req.body || {};
+
+    if (!teamId) {
+      return res.status(400).json({
+        error: "Team is required",
+      });
+    }
+
+    if (!Array.isArray(memberIds)) {
+      return res.status(400).json({
+        error: "Member ids Should be an array",
+      });
+    }
+
+    const team = Team.getTeamById(teamId);
+
+    if (!team) {
+      return res.status(400).json({
+        error: "Invalid Team Id",
+      });
+    }
+
+    if (team.admin !== req.user.id) {
+      return res.status(403).json({
+        error: "Unauthorized",
+      });
+    }
+
+    await Team.removeMembers(memberIds, teamId);
+
+    res.status(200).json({
+      message: "Members has been removed",
+    });
+  } catch (error) {
+    console.log("Error on removeMembers", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   addMembers,
+  removeMembers,
 };

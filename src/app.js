@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 
 const userRoute = require("./routes/user.route");
 const teamRoute = require("./routes/team.route");
+const memberRoute = require("./routes/member.route");
 
 const app = express();
 
@@ -17,5 +18,6 @@ app.get("/health", (req, res) => {
 
 app.use("/api/user", userRoute);
 app.use("/api/team", teamRoute);
+app.use("/api/member", memberRoute);
 
 module.exports = app;
