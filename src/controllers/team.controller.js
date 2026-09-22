@@ -66,6 +66,30 @@ const deleteTeam = async (req, res) => {
   }
 };
 
+const getTeams = async (req, res) => {
+  try {
+    const teams = Team.getTeamsByAdmin(req.user.id);
+    let data;
+
+    if (teams.length) {
+      data = teams.map((team) => ({
+        id: team.id,
+        name: team.name,
+        description: team.description,
+      }));
+    }
+
+    res.status(200).json({
+      data,
+    });
+  } catch (error) {
+    console.log("Error on getTeams", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 const addMembers = async (req, res) => {
   try {
     const { teamId } = req.params || {};
@@ -129,4 +153,5 @@ module.exports = {
   createTeam,
   addMembers,
   deleteTeam,
+  getTeams,
 };

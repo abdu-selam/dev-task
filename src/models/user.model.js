@@ -64,7 +64,7 @@ class UserModel {
       return null;
     }
 
-    return user;
+    return structuredClone(user);
   }
 
   getUserByEmail(email) {
@@ -73,7 +73,7 @@ class UserModel {
       return null;
     }
 
-    return user;
+    return structuredClone(user);
   }
 
   getUserByToken(token) {
@@ -82,7 +82,7 @@ class UserModel {
       return null;
     }
 
-    return user;
+    return structuredClone(user);
   }
 
   async addToken(email, token) {

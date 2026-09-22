@@ -46,7 +46,7 @@ class TeamModel {
 
     return {
       status: true,
-      data: team,
+      data: structuredClone(team),
     };
   }
 
@@ -57,7 +57,13 @@ class TeamModel {
       return null;
     }
 
-    return team;
+    return structuredClone(team);
+  }
+
+  getTeamsByAdmin(adminId) {
+    const teams = this.#allTeam.filter((team) => team.admin === adminId);
+
+    return teams;
   }
 
   async addMembers(members, teamId) {
