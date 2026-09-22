@@ -135,6 +135,26 @@ class TeamModel {
   #checkProps(value) {
     return typeof value === "string" && value.trim();
   }
+
+  async addWork(teamId, title, description) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return;
+    }
+
+    team.works.push({
+      title,
+      description,
+      tasks: [],
+      user: null,
+      id: uuid(),
+    });
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+
+    return team.works;
+  }
 }
 
 const Team = new TeamModel();
