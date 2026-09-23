@@ -294,6 +294,24 @@ class TeamModel {
     await writeJson(this.#allTeam, this.#TYPE_NAME);
     return structuredClone(task);
   }
+
+  async removeTask(teamId, workId, taskId) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return;
+    }
+
+    const work = team.works.find((work) => work.id === workId);
+
+    if (!work) {
+      return;
+    }
+
+    work.tasks = work.tasks.filter((task) => task.id !== taskId);
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+  }
 }
 
 const Team = new TeamModel();

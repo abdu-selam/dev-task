@@ -19,7 +19,7 @@ const addTask = async (req, res) => {
 
     if (!title) {
       return res.status(400).json({
-        error: "work title is required",
+        error: "task title is required",
       });
     }
 
@@ -67,6 +67,62 @@ const addTask = async (req, res) => {
   }
 };
 
+const removeTask = async (req, res) => {
+  try {
+    const { teamId, workId, taskId } = req.params || {};
+
+    if (!teamId) {
+      return res.status(400).json({
+        error: "Team id is required",
+      });
+    }
+
+    if (!workId) {
+      return res.status(400).json({
+        error: "work id is required",
+      });
+    }
+
+    if (!taskId) {
+      return res.status(400).json({
+        error: "task id is required",
+      });
+    }
+
+    const team = Team.getTeamById(teamId);
+
+    if (!team) {
+      return res.status(400).json({
+        error: "Invalid Team Id",
+      });
+    }
+
+    if (team.admin !== req.user.id) {
+      return res.status(403).json({
+        error: "Unauthorized",
+      });
+    }
+
+    const work = Team.getWork(teamId, workId);
+
+    if (!work) {
+      return res.status(400).json({
+        error: "work id is required",
+      });
+    }
+
+    await Team.removeTask(teamId, workId, taskId);
+
+    res.status(204).json({});
+  } catch (error) {
+    console.log("Error on removeTask controller", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   addTask,
+  removeTask,
 };
