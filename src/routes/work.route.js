@@ -7,11 +7,18 @@ const {
   getWorks,
   getWork,
   assignWork,
+  removeAssignned,
 } = require("../controllers/work.controller");
 
 const route = Router();
 
 route.post("/:teamId", protectedRoute, addWork);
+
+route.delete(
+  "/assign/:teamId/:workId/:userId",
+  protectedRoute,
+  removeAssignned,
+);
 route.delete("/:teamId/:workId", protectedRoute, removeWork);
 
 route.put("/assign/:teamId/:workId/:userId", protectedRoute, assignWork);

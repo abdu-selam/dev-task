@@ -308,6 +308,69 @@ const assignWork = async (req, res) => {
   }
 };
 
+const removeAssignned = async (req, res) => {
+  try {
+    const { teamId, workId, userId } = req.params || {};
+
+    if (!teamId) {
+      return res.status(400).json({
+        error: "Team id is required",
+      });
+    }
+
+    if (!workId) {
+      return res.status(400).json({
+        error: "work id is required",
+      });
+    }
+
+    if (!userId) {
+      return res.status(400).json({
+        error: "user id is required",
+      });
+    }
+
+    const team = Team.getTeamById(teamId);
+
+    if (!team) {
+      return res.status(400).json({
+        error: "Invalid Team Id",
+      });
+    }
+
+    if (team.admin !== req.user.id) {
+      return res.status(403).json({
+        error: "Unauthorized",
+      });
+    }
+
+    const work = Team.getWork(teamId, workId);
+
+    if (!work) {
+      return res.status(400).json({
+        error: "work id is required",
+      });
+    }
+
+    const addedUser = await Team.assignUser(teamId, workId, userId);
+
+    if (!addedUser) {
+      return res.status(400).json({
+        error: "user id is required",
+      });
+    }
+
+    res.status(200).json({
+      data: "User has been removed from work",
+    });
+  } catch (error) {
+    console.log("Error on removeAssignned controller", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   addWork,
   removeWork,
@@ -315,4 +378,5 @@ module.exports = {
   getWorks,
   getWork,
   assignWork,
+  removeAssignned,
 };

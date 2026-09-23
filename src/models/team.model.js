@@ -242,6 +242,32 @@ class TeamModel {
 
     return structuredClone(isMember);
   }
+
+  async removeAssigned(teamId, workId, userId) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return;
+    }
+
+    const isMember = team.members.find((user) => user.id === userId);
+
+    if (!isMember) {
+      return;
+    }
+
+    const work = team.works.find((work) => work.id === workId);
+
+    if (!work) {
+      return;
+    }
+
+    work.user = null;
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+
+    return true;
+  }
 }
 
 const Team = new TeamModel();
