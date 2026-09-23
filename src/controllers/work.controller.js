@@ -352,9 +352,9 @@ const removeAssignned = async (req, res) => {
       });
     }
 
-    const addedUser = await Team.assignUser(teamId, workId, userId);
+    const removesUser = await Team.removeAssigned(teamId, workId, userId);
 
-    if (!addedUser) {
+    if (!removesUser) {
       return res.status(400).json({
         error: "user id is required",
       });

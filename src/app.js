@@ -5,6 +5,7 @@ const userRoute = require("./routes/user.route");
 const teamRoute = require("./routes/team.route");
 const memberRoute = require("./routes/member.route");
 const workRoute = require("./routes/work.route");
+const taskRoute = require("./routes/task.route");
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use("/api/user", userRoute);
 app.use("/api/team", teamRoute);
 app.use("/api/member", memberRoute);
 app.use("/api/work", workRoute);
+app.use("/api/task", taskRoute);
 
 module.exports = app;

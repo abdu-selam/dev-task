@@ -268,6 +268,32 @@ class TeamModel {
 
     return true;
   }
+
+  async addTask(teamId, workId, { title, description }) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return;
+    }
+
+    const work = team.works.find((work) => work.id === workId);
+
+    if (!work) {
+      return;
+    }
+
+    const task = {
+      title,
+      description,
+      id: uuid(),
+      finished: false,
+    };
+
+    work.tasks.push(task);
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+    return structuredClone(task);
+  }
 }
 
 const Team = new TeamModel();
