@@ -204,6 +204,18 @@ class TeamModel {
 
     return structuredClone(team.works);
   }
+
+  getWork(teamId, workId) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return null;
+    }
+
+    const work = team.works.find((work) => work.id === workId);
+
+    return structuredClone(work);
+  }
 }
 
 const Team = new TeamModel();

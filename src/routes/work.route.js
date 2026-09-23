@@ -5,6 +5,7 @@ const {
   removeWork,
   updateWork,
   getWorks,
+  getWork,
 } = require("../controllers/work.controller");
 
 const route = Router();
@@ -13,5 +14,6 @@ route.post("/:teamId", protectedRoute, addWork);
 route.delete("/:teamId/:workId", protectedRoute, removeWork);
 route.put("/:teamId/:workId", protectedRoute, updateWork);
 route.get("/:teamId", protectedRoute, getWorks);
+route.get("/:teamId/:workId", protectedRoute, getWork);
 
 module.exports = route;
