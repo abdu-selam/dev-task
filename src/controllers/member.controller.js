@@ -1,4 +1,5 @@
 const Team = require("../models/team.model");
+const { formatMembersArray } = require("../services/team.service");
 
 const addMembers = async (req, res) => {
   try {
@@ -180,7 +181,7 @@ const getMembers = async (req, res) => {
     const members = team.members;
 
     res.status(200).json({
-      message: "Members has been updated",
+      data: members,
     });
   } catch (error) {
     console.log("Error on getMembers", error);

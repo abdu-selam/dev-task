@@ -90,10 +90,7 @@ const removeWork = async (req, res) => {
       });
     }
 
-    res.status(201).json({
-      message: "Work has been removed",
-      works,
-    });
+    res.status(204).json({});
   } catch (error) {
     console.log("Error on removeWork controller", error);
     res.status(500).json({
@@ -196,7 +193,7 @@ const getWorks = async (req, res) => {
   }
 };
 
-const getWork = async () => {
+const getWork = async (req, res) => {
   try {
     const { teamId, workId } = req.params || {};
 

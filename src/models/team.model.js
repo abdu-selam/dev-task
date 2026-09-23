@@ -163,7 +163,7 @@ class TeamModel {
       return;
     }
 
-    team.works = this.works.filter((work) => work.id !== workId);
+    team.works = team.works.filter((work) => work.id !== workId);
 
     await writeJson(this.#allTeam, this.#TYPE_NAME);
 
@@ -329,7 +329,7 @@ class TeamModel {
     let result;
 
     work.tasks = work.tasks.map((task) => {
-      if (task.id !== taskId) {
+      if (task.id === taskId) {
         task.title = this.#checkProps(title) ? title : task.title;
         task.description = this.#checkProps(description)
           ? description
@@ -362,7 +362,7 @@ class TeamModel {
     let result;
 
     work.tasks = work.tasks.map((task) => {
-      if (task.id !== taskId) {
+      if (task.id === taskId) {
         task.finished = !!check;
 
         result = structuredClone(task);
