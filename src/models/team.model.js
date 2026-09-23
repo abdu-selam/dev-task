@@ -312,6 +312,39 @@ class TeamModel {
 
     await writeJson(this.#allTeam, this.#TYPE_NAME);
   }
+
+  async updateTask(teamId, workId, taskId, { title, description }) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return;
+    }
+
+    const work = team.works.find((work) => work.id === workId);
+
+    if (!work) {
+      return;
+    }
+
+    let result;
+
+    work.tasks = work.tasks.map((task) => {
+      if (task.id !== taskId) {
+        task.title = this.#checkProps(title) ? title : task.title;
+        task.description = this.#checkProps(description)
+          ? description
+          : task.description;
+
+        result = structuredClone(task);
+      }
+
+      return task;
+    });
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+
+    return result;
+  }
 }
 
 const Team = new TeamModel();

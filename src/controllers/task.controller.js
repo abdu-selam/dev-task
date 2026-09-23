@@ -122,7 +122,82 @@ const removeTask = async (req, res) => {
   }
 };
 
+const updateTask = async (req, res) => {
+  try {
+    const { teamId, workId, taskId } = req.params || {};
+    const { title, description } = req.body || {};
+
+    if (!teamId) {
+      return res.status(400).json({
+        error: "Team id is required",
+      });
+    }
+
+    if (!workId) {
+      return res.status(400).json({
+        error: "work id is required",
+      });
+    }
+
+    if (!taskId) {
+      return res.status(400).json({
+        error: "task id is required",
+      });
+    }
+
+    const team = Team.getTeamById(teamId);
+
+    if (!team) {
+      return res.status(400).json({
+        error: "Invalid Team Id",
+      });
+    }
+
+    if (team.admin !== req.user.id) {
+      return res.status(403).json({
+        error: "Unauthorized",
+      });
+    }
+
+    const work = Team.getWork(teamId, workId);
+
+    if (!work) {
+      return res.status(400).json({
+        error: "work id is required",
+      });
+    }
+
+    if (!title || !description) {
+      return res.status(400).json({
+        error: "Nothing to update",
+      });
+    }
+
+    const task = await Team.updateTask(teamId, workId, taskId, {
+      title,
+      description,
+    });
+
+    if (!task) {
+      return res.status(400).json({
+        error: "task id is required",
+      });
+    }
+
+    res.status(200).json({
+      message: "Task has been updated",
+      data: task,
+    });
+  } catch (error) {
+    console.log("Error on updateTask controller", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   addTask,
   removeTask,
+  updateTask,
 };
