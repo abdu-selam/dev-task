@@ -101,7 +101,65 @@ const removeWork = async (req, res) => {
   }
 };
 
+const updateWork = async (req, res) => {
+  try {
+    const { teamId, workId } = req.params || {};
+    const { title, description } = req.body || {};
+
+    if (!teamId) {
+      return res.status(400).json({
+        error: "Team is required",
+      });
+    }
+
+    if (!workId) {
+      return res.status(400).json({
+        error: "work is required",
+      });
+    }
+
+    if (!title || !description) {
+      return res.status(400).json({
+        error: "nothing to update",
+      });
+    }
+
+    const team = Team.getTeamById(teamId);
+
+    if (!team) {
+      return res.status(400).json({
+        error: "Invalid Team Id",
+      });
+    }
+
+    if (team.admin !== req.user.id) {
+      return res.status(403).json({
+        error: "Unauthorized",
+      });
+    }
+
+    const works = await Team.updateWork(teamId, workId, { title, description });
+
+    if (!works) {
+      return res.status(400).json({
+        error: "Nothing to update",
+      });
+    }
+
+    res.status(200).json({
+      message: "Work has been updated",
+      works,
+    });
+  } catch (error) {
+    console.log("Error on updateWork controller", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   addWork,
   removeWork,
+  updateWork,
 };

@@ -169,6 +169,31 @@ class TeamModel {
 
     return team.works;
   }
+
+  async updateWork(teamId, workId, { title, description }) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return;
+    }
+
+    let result;
+    team.works = team.works.map((work) => {
+      if (work.id === workId) {
+        work.title = this.#checkProps(title) ? title : work.title;
+        work.description = this.#checkProps(description)
+          ? description
+          : work.description;
+
+        result = structuredClone(work);
+      }
+
+      return work;
+    });
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+    return result;
+  }
 }
 
 const Team = new TeamModel();
