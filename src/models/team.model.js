@@ -345,6 +345,36 @@ class TeamModel {
 
     return result;
   }
+
+  async checkTask(teamId, workId, taskId, check) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return;
+    }
+
+    const work = team.works.find((work) => work.id === workId);
+
+    if (!work) {
+      return;
+    }
+
+    let result;
+
+    work.tasks = work.tasks.map((task) => {
+      if (task.id !== taskId) {
+        task.finished = !!check;
+
+        result = structuredClone(task);
+      }
+
+      return task;
+    });
+
+    await writeJson(this.#allTeam, this.#TYPE_NAME);
+
+    return result;
+  }
 }
 
 const Team = new TeamModel();
