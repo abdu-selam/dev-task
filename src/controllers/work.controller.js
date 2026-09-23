@@ -1,4 +1,5 @@
 const Team = require("../models/team.model");
+const { prepareWorksRes } = require("../services/team.service");
 
 const addWork = async (req, res) => {
   try {
@@ -158,8 +159,46 @@ const updateWork = async (req, res) => {
   }
 };
 
+const getWorks = async (req, res) => {
+  try {
+    const { teamId } = req.params || {};
+
+    if (!teamId) {
+      return res.status(400).json({
+        error: "Team is required",
+      });
+    }
+
+    const team = Team.getTeamById(teamId);
+
+    if (!team) {
+      return res.status(400).json({
+        error: "Invalid Team Id",
+      });
+    }
+
+    if (team.admin !== req.user.id) {
+      return res.status(403).json({
+        error: "Unauthorized",
+      });
+    }
+
+    const works = prepareWorksRes(Team.getWorks(teamId));
+
+    res.status(200).json({
+      data: works,
+    });
+  } catch (error) {
+    console.log("Error on getWorks controller", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   addWork,
   removeWork,
   updateWork,
+  getWorks,
 };

@@ -194,6 +194,16 @@ class TeamModel {
     await writeJson(this.#allTeam, this.#TYPE_NAME);
     return result;
   }
+
+  getWorks(teamId) {
+    const team = this.#allTeam.find((team) => team.id === teamId);
+
+    if (!team) {
+      return null;
+    }
+
+    return structuredClone(team.works);
+  }
 }
 
 const Team = new TeamModel();

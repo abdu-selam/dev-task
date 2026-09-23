@@ -17,6 +17,15 @@ const formatMembersArray = (members) => {
   return result;
 };
 
+const prepareWorksRes = (works) => {
+  return works.map((work) => ({
+    title: work.title,
+    description: work.description,
+    id: work.id,
+  }));
+};
+
 module.exports = {
   formatMembersArray,
+  prepareWorksRes,
 };
