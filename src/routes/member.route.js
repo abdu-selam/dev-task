@@ -9,9 +9,11 @@ const {
 
 const route = Router();
 
-route.post("/:teamId", protectedRoute, addMembers);
-route.delete("/:teamId", protectedRoute, removeMembers);
-route.put("/:teamId/:userId", protectedRoute, updateMember);
-route.get("/:teamId", protectedRoute, getMembers);
+route.use(protectedRoute);
+
+route.post("/:teamId", addMembers);
+route.delete("/:teamId", removeMembers);
+route.put("/:teamId/:userId", updateMember);
+route.get("/:teamId", getMembers);
 
 module.exports = route;

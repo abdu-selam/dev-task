@@ -10,10 +10,12 @@ const {
 
 const route = Router();
 
-route.post("/:teamId/:workId", protectedRoute, addTask);
-route.delete("/:teamId/:workId/:taskId", protectedRoute, removeTask);
+route.use(protectedRoute);
 
-route.put("/check/:teamId/:workId/:taskId", protectedRoute, checkTask);
-route.put("/:teamId/:workId/:taskId", protectedRoute, updateTask);
+route.post("/:teamId/:workId", addTask);
+route.delete("/:teamId/:workId/:taskId", removeTask);
+
+route.put("/check/:teamId/:workId/:taskId", checkTask);
+route.put("/:teamId/:workId/:taskId", updateTask);
 
 module.exports = route;

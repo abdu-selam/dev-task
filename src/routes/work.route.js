@@ -12,19 +12,17 @@ const {
 
 const route = Router();
 
-route.post("/:teamId", protectedRoute, addWork);
+route.use(protectedRoute);
 
-route.delete(
-  "/assign/:teamId/:workId/:userId",
-  protectedRoute,
-  removeAssignned,
-);
-route.delete("/:teamId/:workId", protectedRoute, removeWork);
+route.post("/:teamId", addWork);
 
-route.put("/assign/:teamId/:workId/:userId", protectedRoute, assignWork);
-route.put("/:teamId/:workId", protectedRoute, updateWork);
+route.delete("/assign/:teamId/:workId/:userId", removeAssignned);
+route.delete("/:teamId/:workId", removeWork);
 
-route.get("/:teamId", protectedRoute, getWorks);
-route.get("/:teamId/:workId", protectedRoute, getWork);
+route.put("/assign/:teamId/:workId/:userId", assignWork);
+route.put("/:teamId/:workId", updateWork);
+
+route.get("/:teamId", getWorks);
+route.get("/:teamId/:workId", getWork);
 
 module.exports = route;
