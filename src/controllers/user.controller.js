@@ -75,6 +75,12 @@ const login = async (req, res) => {
       });
     }
 
+    if (user.password !== password) {
+      return res.status(400).json({
+        error: "Invalid Cridentials",
+      });
+    }
+
     const token = uuid();
 
     if (access) {
@@ -130,8 +136,39 @@ const logout = async (req, res) => {
   }
 };
 
+const checkLogin = async (req, res) => {
+  try {
+    const { access } = req.cookies || {};
+
+    if (!access) {
+      return res.status(401).json({
+        error: "Unauthorized",
+      });
+    }
+
+    const user = Users.getUserByToken(access);
+    if (!user) {
+      return res.status(401).json({
+        error: "Unauthorized",
+      });
+    }
+
+    res.status(200).json({
+      name: user.name,
+      email: user.email,
+      id: user.id,
+    });
+  } catch (error) {
+    console.log("Error on checkLogin controller", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
+  checkLogin,
 };
