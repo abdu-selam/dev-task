@@ -175,10 +175,42 @@ const updateTeam = async (req, res) => {
   }
 };
 
+const stats = async (req, res) => {
+  try {
+    const teamData = Team.getTeamsByAdmin(req.user.id);
+
+    const data = {
+      projects: teamData.length,
+      works: 0,
+      members: 0,
+      tasks: 0,
+    };
+
+    teamData.forEach((team) => {
+      data.works += team.works.length;
+      data.members += team.members.length;
+
+      team.works.forEach((work) => {
+        data.tasks += work.task.length;
+      });
+    });
+
+    res.stats(200).json({
+      data,
+    });
+  } catch (error) {
+    console.log("Error on stats controller", error);
+    res.stats(500).json({
+      error: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   createTeam,
   deleteTeam,
   getTeams,
   getTeam,
   updateTeam,
+  stats,
 };
