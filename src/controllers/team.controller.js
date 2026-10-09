@@ -19,6 +19,8 @@ const createTeam = async (req, res) => {
       });
     }
 
+    delete result.data.admin;
+
     res.status(201).json({
       message: "Team created",
       data: result.data,
@@ -69,13 +71,15 @@ const deleteTeam = async (req, res) => {
 const getTeams = async (req, res) => {
   try {
     const teams = Team.getTeamsByAdmin(req.user.id);
-    let data;
+    let data = [];
 
     if (teams.length) {
       data = teams.map((team) => ({
         id: team.id,
-        name: team.name,
+        title: team.name,
         description: team.description,
+        works: team.works.length,
+        members: team.members.length,
       }));
     }
 
@@ -114,9 +118,9 @@ const getTeam = async (req, res) => {
       });
     }
 
-    res.status(200).json({
-      team,
-    });
+    delete team.admin;
+
+    res.status(200).json(team);
   } catch (error) {
     console.log("Error on getTeam", error);
     res.status(500).json({
@@ -191,13 +195,11 @@ const stats = async (req, res) => {
       data.members += team.members.length;
 
       team.works.forEach((work) => {
-        data.tasks += work.task.length;
+        data.tasks += work.tasks.length;
       });
     });
 
-    res.stats(200).json({
-      data,
-    });
+    res.status(200).json(data);
   } catch (error) {
     console.log("Error on stats controller", error);
     res.stats(500).json({

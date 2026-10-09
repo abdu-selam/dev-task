@@ -143,17 +143,19 @@ class TeamModel {
       return;
     }
 
-    team.works.push({
+    const work = {
       title,
       description,
       tasks: [],
       user: null,
       id: uuid(),
-    });
+    };
+
+    team.works.push(work);
 
     await writeJson(this.#allTeam, this.#TYPE_NAME);
 
-    return team.works;
+    return work;
   }
 
   async removeWork(teamId, workId) {
@@ -213,8 +215,20 @@ class TeamModel {
     }
 
     const work = team.works.find((work) => work.id === workId);
+    const user = team.members.find((member) => member.id === work.user);
 
-    return structuredClone(work);
+    const allMembers = team.members.map((member) => ({
+      id: member.id,
+      name: member.name,
+    }));
+
+    const data = {
+      ...work,
+      user,
+      all: allMembers,
+    };
+
+    return structuredClone(data);
   }
 
   async assignUser(teamId, workId, userId) {

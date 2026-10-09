@@ -32,9 +32,9 @@ const addWork = async (req, res) => {
       });
     }
 
-    const works = await Team.addWork(teamId, title, description);
+    const work = await Team.addWork(teamId, title, description);
 
-    if (!works) {
+    if (!work) {
       return res.status(400).json({
         error: "Team id is required",
       });
@@ -42,7 +42,7 @@ const addWork = async (req, res) => {
 
     res.status(201).json({
       message: "Work has been added",
-      works,
+      work,
     });
   } catch (error) {
     console.log("Error on addWork controller", error);
@@ -295,7 +295,7 @@ const assignWork = async (req, res) => {
     }
 
     res.status(200).json({
-      data: addedUser,
+      user: addedUser,
     });
   } catch (error) {
     console.log("Error on assignWork controller", error);
